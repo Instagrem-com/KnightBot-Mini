@@ -1,15 +1,14 @@
 /**
- * AntiTag Command
- * Enable/disable anti-tag and set action (delete/kick)
+ * أمر مكافحة التاج - ستايل لوسيفر 😈
  */
 
 const database = require('../../database');
 
 module.exports = {
-  name: 'antitag',
-  aliases: ['antimention', 'at'],
-  description: 'Configure anti-tag protection (tagall/hidetag)',
-  usage: '.antitag <on/off/set/get>',
+  name: 'مكافحة_المنشن',
+  aliases: ['م_تاج', 'منع.المنشن'],
+  description: 'ضبط حماية التاج (منع التاج أو التاج الصامت)',
+  usage: '.مكافحة_المنشن <تفعيل/تعطيل/ضبط/عرض>',
   category: 'admin',
   groupOnly: true,
   adminOnly: true,
@@ -19,61 +18,63 @@ module.exports = {
     try {
       if (!args[0]) {
         const settings = database.getGroupSettings(extra.from);
-        const status = settings.antitag ? 'ON' : 'OFF';
-        const action = settings.antitagAction || 'delete';
+        const status = settings.antitag ? 'شغال' : 'مطفي';
+        const action = settings.antitagAction || 'حذف';
         return extra.reply(
-          `📛 Anti-tag is *${status}* (action: *${action}*).\n` +
-          'Usage:\n' +
-          '  .antitag on\n' +
-          '  .antitag off\n' +
-          '  .antitag set delete | kick\n' +
-          '  .antitag get'
+          `📛 حالة مكافحة التاج:\n` +
+          `الحالة: *${status}* 😎\n` +
+          `الإجراء: *${action}* 🔥\n\n` +
+          'طريقة الاستخدام:\n' +
+          '  .مكافحة_المنشن تفعيل 😈\n' +
+          '  .مكافحة_المنشن تعطيل 😴\n' +
+          '  .مكافحة_المنشن ضبط حذف | طرد ⚡\n' +
+          '  .مكافحة_المنشن عرض 👀'
         );
       }
       
       const opt = args[0].toLowerCase();
       
-      if (opt === 'on') {
+      if (opt === 'تفعيل') {
         if (database.getGroupSettings(extra.from).antitag) {
-          return extra.reply('*Antitag is already on*');
+          return extra.reply('يا معلم الحماية دي شغالة من زمان 😎');
         }
         database.updateGroupSettings(extra.from, { antitag: true });
-        return extra.reply('*Antitag has been turned ON*');
+        return extra.reply('✅ تمام كده، حماية التاج اتفعّلت 😈');
       }
       
-      if (opt === 'off') {
+      if (opt === 'تعطيل') {
         database.updateGroupSettings(extra.from, { antitag: false });
-        return extra.reply('*Antitag has been turned OFF*');
+        return extra.reply('✅ تمام، حماية التاج اتقفلت 😴');
       }
       
-      if (opt === 'set') {
+      if (opt === 'ضبط') {
         if (args.length < 2) {
-          return extra.reply('*Please specify an action: .antitag set delete | kick*');
+          return extra.reply('⚠️ يا معلم حدد الإجراء: .مكافحة_المنشن ضبط حذف | طرد 😎');
         }
         
         const setAction = args[1].toLowerCase();
-        if (!['delete', 'kick'].includes(setAction)) {
-          return extra.reply('*Invalid action. Choose delete or kick.*');
+        if (!['حذف', 'طرد'].includes(setAction)) {
+          return extra.reply('❌ مش صح يا باشا، اختار حذف أو طرد 😅');
         }
         
         database.updateGroupSettings(extra.from, { 
           antitagAction: setAction,
-          antitag: true // Auto-enable when setting action
+          antitag: true // تفعيل تلقائي عند ضبط الإجراء
         });
-        return extra.reply(`*Antitag action set to ${setAction}*`);
+        return extra.reply(`✅ اتظبط يا معلم، الإجراء اتغير لـ: ${setAction} 😎`);
       }
       
-      if (opt === 'get') {
+      if (opt === 'عرض') {
         const settings = database.getGroupSettings(extra.from);
-        const status = settings.antitag ? 'ON' : 'OFF';
-        const action = settings.antitagAction || 'delete';
-        return extra.reply(`*Antitag Configuration:*\nStatus: ${status}\nAction: ${action}`);
+        const status = settings.antitag ? 'شغال' : 'مطفي';
+        const action = settings.antitagAction || 'حذف';
+        return extra.reply(`👀 حالة مكافحة التاج:\nالحالة: ${status} 😎\nالإجراء: ${action} 🔥`);
       }
       
-      return extra.reply('*Use .antitag for usage.*');
+      return extra.reply('⚠️ استخدم .مكافحة_المنشن عشان تشوف طريقة الاستخدام 😅');
       
     } catch (error) {
-      await extra.reply(`❌ Error: ${error.message}`);
+      await extra.reply(`❌ حصل غلطة: ${error.message} 😢`);
     }
   }
 };

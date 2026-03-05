@@ -1,74 +1,72 @@
 /**
- * Warn Command - Warn a user
+ * أمر تحذير عضو - ⚠️
  */
 
 const database = require('../../database');
 const config = require('../../config');
 
 module.exports = {
-  name: 'warn',
-  aliases: ['warning'],
+  name: 'تحذير',
+  aliases: ['انذار'],
   category: 'admin',
-  description: 'Warn a user',
-  usage: '.warn @user <reason>',
+  description: 'تحذير عضو في الجروب',
+  usage: '.تحذير @user السبب',
   groupOnly: true,
   adminOnly: true,
   botAdminNeeded: true,
+  
   async execute(sock, msg, args, extra) {
     try {
       let target;
       const ctx = msg.message?.extendedTextMessage?.contextInfo;
       const mentioned = ctx?.mentionedJid || [];
       
-      if (mentioned && mentioned.length > 0) {
+      // تحديد العضو الهدف
+      if (mentioned.length > 0) {
         target = mentioned[0];
       } else if (ctx?.participant && ctx.stanzaId && ctx.quotedMessage) {
         target = ctx.participant;
       } else {
-        return extra.reply('❌ Please mention or reply to the user to warn!\n\nExample: .warn @user Breaking rules');
+        return extra.reply('❌ لازم تعمل منشن للعضو أو ترد على رسالته لتحذيره\n\nمثال: .تحذير @user كسر القوانين');
       }
       
-      const reason = args.slice(mentioned.length > 0 ? 1 : 0).join(' ') || 'No reason specified';
+      // سبب التحذير
+      const reason = args.slice(mentioned.length > 0 ? 1 : 0).join(' ') || 'مفيش سبب محدد';
       
-      // Cannot warn admins
-      const foundParticipant = extra.groupMetadata.participants.find(
+      // منع تحذير الأدمن
+      const isAdmin = extra.groupMetadata.participants.some(
         p => (p.id === target || p.lid === target) && (p.admin === 'admin' || p.admin === 'superadmin')
       );
-      
-      if (foundParticipant) {
-        return extra.reply('❌ Cannot warn an admin!');
+      if (isAdmin) {
+        return extra.reply('❌ مينفعش تحذر أدمن في الجروب');
       }
       
+      // إضافة التحذير في قاعدة البيانات
       const warnings = database.addWarning(extra.from, target, reason);
       
-      let text = `⚠️ *USER WARNING*\n\n`;
-      text += `👤 User: @${target.split('@')[0]}\n`;
-      text += `📝 Reason: ${reason}\n`;
-      text += `⚠️ Warnings: ${warnings.count}/${config.maxWarnings}\n\n`;
+      // بناء رسالة التحذير
+      let text = `⚠️ *تم تحذير العضو*\n\n`;
+      text += `👤 العضو: @${target.split('@')[0]}\n`;
+      text += `📌 السبب: ${reason}\n`;
+      text += `🔢 التحذيرات: ${warnings.count}/${config.maxWarnings}\n\n`;
       
+      // التحقق إذا وصل الحد الأقصى
       if (warnings.count >= config.maxWarnings) {
-        text += `❌ User has reached maximum warnings and will be removed!`;
-        
-        await sock.sendMessage(extra.from, {
-          text,
-          mentions: [target]
-        }, { quoted: msg });
+        text += '❌ العضو وصل لأقصى عدد تحذيرات وسيتم طرده من الجروب!';
+        await sock.sendMessage(extra.from, { text, mentions: [target] }, { quoted: msg });
         
         if (extra.isBotAdmin) {
           await sock.groupParticipantsUpdate(extra.from, [target], 'remove');
           database.clearWarnings(extra.from, target);
         }
       } else {
-        text += `⚠️ Next warning will result in removal!`;
-        
-        await sock.sendMessage(extra.from, {
-          text,
-          mentions: [target]
-        }, { quoted: msg });
+        text += '⚠️ لو اتحذر مرة كمان هيتم طرده من الجروب';
+        await sock.sendMessage(extra.from, { text, mentions: [target] }, { quoted: msg });
       }
       
     } catch (error) {
-      await extra.reply(`❌ Error: ${error.message}`);
+      console.error('تحذير عضو خطأ:', error);
+      await extra.reply(`❌ حصل خطأ أثناء تنفيذ الأمر\n${error.message}`);
     }
   }
 };

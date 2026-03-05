@@ -1,13 +1,13 @@
 /**
- * Delete Command
- * Delete a replied message
+ * أمر مسح الرسائل - Delete Command
+ * يحذف الرسالة اللي اترد عليها
  */
 
 module.exports = {
-  name: 'delete',
-  aliases: ['del'],
-  description: 'Delete a replied message',
-  usage: '.delete (reply to a message)',
+  name: 'مسح',       // اسم الأمر بالعربي
+  aliases: ['حذف'],  // أي اسم بديل بالعربي
+  description: 'حذف رسالة تم الرد عليها', // وصف الأمر بالعربي
+  usage: '.مسح (الرد على الرسالة المراد مسحها)',
   category: 'admin',
   groupOnly: true,
   adminOnly: true,
@@ -18,7 +18,7 @@ module.exports = {
       const ctx = msg.message?.extendedTextMessage?.contextInfo;
       
       if (!ctx?.stanzaId || !ctx?.participant) {
-        return extra.reply('🗑️ Reply to the message you want to delete.');
+        return extra.reply(' الرجاء الرد على الرسالة التي تريد مسحه 👀.');
       }
       
       const deleteKey = { 
@@ -30,9 +30,8 @@ module.exports = {
       await sock.sendMessage(extra.from, { delete: deleteKey });
       
     } catch (error) {
-      console.error('Delete command error:', error);
-      await extra.reply('❌ Failed to delete message.');
+      console.error('خطأ في أمر المسح:', error);
+      await extra.reply('❌ فشل في مسح الرسالة.');
     }
   }
 };
-

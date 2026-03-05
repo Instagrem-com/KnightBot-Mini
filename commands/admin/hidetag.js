@@ -7,10 +7,10 @@
 const { downloadMediaMessage } = require('@whiskeysockets/baileys');
 
 module.exports = {
-  name: 'hidetag',
-  aliases: ['tag'],
-  description: 'Silently tag all members in the group',
-  usage: '.tag <message> (or reply to media)',
+  name: 'منشن',
+  aliases: ['تاج'],
+  description: 'منشن_لجميع_الاعضاء',
+  usage: '.منشن >الرساله< او اعمل ريبلاي ع رساله ',
   category: 'admin',
   groupOnly: true,
   adminOnly: true,

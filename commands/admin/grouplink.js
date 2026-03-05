@@ -1,13 +1,14 @@
 /**
- * Group Link Command - Get group invite link
+ * أمر رابط الجروب - ستايل لوسيفر 😈
+ * الحصول على رابط دعوة الجروب
  */
 
 module.exports = {
-    name: 'grouplink',
-    aliases: ['link', 'invite'],
+    name: 'رابط_الجروب',           
+    aliases: ['رابط', 'دعوة'],     
     category: 'admin',
-    description: 'Get group invite link',
-    usage: '.grouplink',
+    description: 'جيبلك رابط دعوة الجروب 😎',
+    usage: '.رابط_الجروب',
     groupOnly: true,
     adminOnly: true,
     botAdminNeeded: true,
@@ -17,16 +18,15 @@ module.exports = {
         const code = await sock.groupInviteCode(extra.from);
         const link = `https://chat.whatsapp.com/${code}`;
         
-        let text = `🔗 *GROUP INVITE LINK*\n\n`;
-        text += `📱 Group: ${extra.groupMetadata.subject}\n`;
-        text += `🔗 Link: ${link}\n\n`;
-        text += `⚠️ Don't share this link publicly!`;
+        let text = `🔗 *رابط دعوة الجروب* 😎\n\n`;
+        text += `📱 اسم الجروب: ${extra.groupMetadata.subject} 😈\n`;
+        text += `🔗 الرابط: ${link} 🔥\n\n`;
+        text += `⚠️ خلي بالك متشاركش الرابط مع أي حد عشوائي 😅`;
         
         await extra.reply(text);
         
       } catch (error) {
-        await extra.reply(`❌ Error: ${error.message}`);
+        await extra.reply(`❌ يا معلم حصل خطأ: ${error.message} 😢`);
       }
     }
-  };
-  
+};

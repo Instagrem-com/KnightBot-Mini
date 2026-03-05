@@ -1,13 +1,14 @@
 /**
- * Mute Command - Close group (only admins can send)
+ * أمر قفل الجروب - ستايل لوسيفر 😈
+ * يمنع الأعضاء من إرسال الرسائل
  */
 
 module.exports = {
-    name: 'mute',
-    aliases: ['close', 'closegroup'],
+    name: 'قفل',
+    aliases: ['mute', 'close', 'closegroup'],
     category: 'admin',
-    description: 'Close group (only admins can send messages)',
-    usage: '.mute',
+    description: 'قفل الجروب بحيث الأدمن بس يقدر يرسل رسائل 😈',
+    usage: '.قفل',
     groupOnly: true,
     adminOnly: true,
     botAdminNeeded: true,
@@ -15,11 +16,10 @@ module.exports = {
     async execute(sock, msg, args, extra) {
       try {
         await sock.groupSettingUpdate(extra.from, 'announcement');
-        await extra.reply('🔒 Group has been closed!\n\nOnly admins can send messages now.');
-        
+        await extra.reply('🔒 اتقفل الجروب دلوقتي!\nالأعضاء العاديين مش هيقدرو يبعتو رسائل 😎');
       } catch (error) {
-        await extra.reply(`❌ Error: ${error.message}`);
+        console.error('خطأ في أمر قفل الجروب:', error);
+        await extra.reply(`❌ حصل غلطة أثناء تنفيذ الأمر: ${error.message}`);
       }
     }
-  };
-  
+};

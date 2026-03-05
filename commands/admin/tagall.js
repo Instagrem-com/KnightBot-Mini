@@ -1,29 +1,29 @@
 /**
- * Tag All Command - Mention all group members
+ * أمر منشن الكل - ستايل لوسيفر 😈
+ * منشن لكل أعضاء الجروب مع رسالة اختيارية
  */
 
 module.exports = {
-    name: 'tagall',
-    aliases: ['mentionall', 'everyone'],
+    name: 'منشن_الكل',
+    aliases: ['tagall', 'mentionall', 'everyone'],
     category: 'admin',
-    description: 'Tag all group members',
-    usage: '.tagall <message>',
+    description: 'عمل منشن لكل أعضاء الجروب 🔔',
+    usage: '.منشن_الكل <رسالة>',
     groupOnly: true,
     adminOnly: true,
     botAdminNeeded: true,
     
     async execute(sock, msg, args, extra) {
       try {
-        const message = args.join(' ') || 'Everyone!';
-        
+        const message = args.join(' ') || 'ردو على عمكم لوسيفر 💀 🖤';
         const participants = extra.groupMetadata.participants.map(p => p.id);
         
-        let text = `📢 *GROUP ANNOUNCEMENT*\n\n`;
+        let text = `الي مش هيتفاعل ويرد امو رقاصه 😂 \n\n`;
         text += `${message}\n\n`;
-        text += `👥 Tagged Members:\n`;
+        text += `الاعضاء 👀❤️:\n`;
         
         participants.forEach((participant, index) => {
-          text += `${index + 1}. @${participant.split('@')[0]}\n`;
+          text += `• @${participant.split('@')[0]}\n`;
         });
         
         await sock.sendMessage(extra.from, {
@@ -32,8 +32,7 @@ module.exports = {
         }, { quoted: msg });
         
       } catch (error) {
-        await extra.reply(`❌ Error: ${error.message}`);
+        await extra.reply(`❌ حصل خطأ أثناء تنفيذ الأمر\n${error.message}`);
       }
     }
-  };
-  
+};

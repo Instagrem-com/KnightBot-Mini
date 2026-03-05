@@ -1,15 +1,15 @@
 /**
- * Antilink Command - Toggle antilink protection with delete/kick options
+ * أمر مكافحة الروابط - ستايل لوسيفر 😈
  */
 
 const database = require('../../database');
 
 module.exports = {
-  name: 'antilink',
-  aliases: [],
+  name: 'مكافحة_الروابط',
+  aliases: ['منع.اللينك'],
   category: 'admin',
-  description: 'Configure antilink protection (delete/kick)',
-  usage: '.antilink <on/off/set/get>',
+  description: 'ضبط حماية الروابط (حذف/طرد)',
+  usage: '.مكافحة_الروابط <تفعيل/تعطيل/ضبط/عرض>',
   groupOnly: true,
   adminOnly: true,
   botAdminNeeded: true,
@@ -18,63 +18,63 @@ module.exports = {
     try {
       if (!args[0]) {
         const settings = database.getGroupSettings(extra.from);
-        const status = settings.antilink ? 'ON' : 'OFF';
-        const action = settings.antilinkAction || 'delete';
+        const status = settings.antilink ? 'شغال' : 'مطفي';
+        const action = settings.antilinkAction || 'حذف';
         return extra.reply(
-          `🔗 *Antilink Status*\n\n` +
-          `Status: *${status}*\n` +
-          `Action: *${action}*\n\n` +
-          `Usage:\n` +
-          `  .antilink on\n` +
-          `  .antilink off\n` +
-          `  .antilink set delete | kick\n` +
-          `  .antilink get`
+          `🔗 حالة مكافحة الروابط:\n` +
+          `الحالة: *${status}* 😎\n` +
+          `الإجراء: *${action}* 🔥\n\n` +
+          `طريقة الاستخدام:\n` +
+          `  .مكافحة_الروابط تفعيل 😈 - شغل الحماية\n` +
+          `  .مكافحة_الروابط تعطيل 💤 - قفل الحماية\n` +
+          `  .مكافحة_الروابط ضبط حذف | طرد ⚡ - اختار الإجراء لما حد ينتهك\n` +
+          `  .مكافحة_الروابط عرض 👀 - شوف الإعدادات`
         );
       }
       
       const opt = args[0].toLowerCase();
       
-      if (opt === 'on') {
+      if (opt === 'تفعيل') {
         if (database.getGroupSettings(extra.from).antilink) {
-          return extra.reply('*Antilink is already on*');
+          return extra.reply('يا معلم، حماية الروابط شغالة من زمان 😎');
         }
         database.updateGroupSettings(extra.from, { antilink: true });
-        return extra.reply('*Antilink has been turned ON*');
+        return extra.reply('✅ تمام كده، حماية الروابط اتفعّلت 😈');
       }
       
-      if (opt === 'off') {
+      if (opt === 'تعطيل') {
         database.updateGroupSettings(extra.from, { antilink: false });
-        return extra.reply('*Antilink has been turned OFF*');
+        return extra.reply('✅ تمام يا معلم، حماية الروابط اتقفلت 💤');
       }
       
-      if (opt === 'set') {
+      if (opt === 'ضبط') {
         if (args.length < 2) {
-          return extra.reply('*Please specify an action: .antilink set delete | kick*');
+          return extra.reply('⚠️ يا معلم حدد الإجراء: .مكافحة_الروابط ضبط حذف | طرد 😎');
         }
         
         const setAction = args[1].toLowerCase();
-        if (!['delete', 'kick'].includes(setAction)) {
-          return extra.reply('*Invalid action. Choose delete or kick.*');
+        if (!['حذف', 'طرد'].includes(setAction)) {
+          return extra.reply('❌ مش صح يا باشا، اختار حذف أو طرد 😅');
         }
         
         database.updateGroupSettings(extra.from, { 
           antilinkAction: setAction,
-          antilink: true // Auto-enable when setting action
+          antilink: true // شغّل الحماية تلقائي لما تضبط الإجراء
         });
-        return extra.reply(`*Antilink action set to ${setAction}*`);
+        return extra.reply(`✅ اتظبط يا معلم، الإجراء اتغير لـ: ${setAction} 😎`);
       }
       
-      if (opt === 'get') {
+      if (opt === 'عرض') {
         const settings = database.getGroupSettings(extra.from);
-        const status = settings.antilink ? 'ON' : 'OFF';
-        const action = settings.antilinkAction || 'delete';
-        return extra.reply(`*Antilink Configuration:*\nStatus: ${status}\nAction: ${action}`);
+        const status = settings.antilink ? 'شغال' : 'مطفي';
+        const action = settings.antilinkAction || 'حذف';
+        return extra.reply(`👀 حالة مكافحة الروابط:\nالحالة: ${status} 😎\nالإجراء: ${action} 🔥`);
       }
       
-      return extra.reply('*Use .antilink for usage.*');
+      return extra.reply('⚠️ استخدم .مكافحة_الروابط عشان تشوف طريقة الاستخدام 😅');
       
     } catch (error) {
-      await extra.reply(`❌ Error: ${error.message}`);
+      await extra.reply(`❌ حصل غلطة يا معلم: ${error.message} 😢`);
     }
   }
 };

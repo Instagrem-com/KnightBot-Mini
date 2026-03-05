@@ -1,15 +1,15 @@
 /**
- * AutoSticker Command - Enable or disable auto-sticker conversion
+ * أمر الملصقات التلقائية - ستايل لوسيفر 😈
  */
 
 const database = require('../../database');
 
 module.exports = {
-  name: 'autosticker',
-  aliases: ['autos', 'asticker'],
+  name: 'ملصقات_تلقائية',
+  aliases: ['ملصقات_اوكس', 'ملصق_تلقائي'],
   category: 'admin',
-  description: 'Enable or disable auto-sticker conversion (images/videos automatically become stickers)',
-  usage: '.autosticker <on/off>',
+  description: 'تفعيل أو تعطيل التحويل التلقائي للصور والفيديوهات إلى ملصقات',
+  usage: '.ملصقات_تلقائية <تفعيل/تعطيل>',
   groupOnly: true,
   adminOnly: true,
   botAdminNeeded: false,
@@ -18,40 +18,39 @@ module.exports = {
     try {
       if (!args[0]) {
         const settings = database.getGroupSettings(extra.from);
-        const status = settings.autosticker ? 'ON' : 'OFF';
+        const status = settings.autosticker ? 'شغال' : 'مطفي';
         return extra.reply(
-          `📌 *AutoSticker Status*\n\n` +
-          `Status: *${status}*\n\n` +
-          `When enabled, all images and videos sent in this group will automatically be converted to stickers.\n\n` +
-          `Usage:\n` +
-          `  .autosticker on\n` +
-          `  .autosticker off`
+          `📌 حالة الملصقات التلقائية:\n` +
+          `الحالة: *${status}* 😎\n\n` +
+          `لو مفعل، كل الصور والفيديوهات اللي تتبعت هنا هتتحول تلقائيًا لملصقات 😈\n\n` +
+          `طريقة الاستخدام:\n` +
+          `  .ملصقات_تلقائية تفعيل 😎 - شغل التحويل التلقائي\n` +
+          `  .ملصقات_تلقائية تعطيل 💤 - قفل التحويل التلقائي`
         );
       }
       
       const opt = args[0].toLowerCase();
       
-      if (opt === 'on') {
+      if (opt === 'تفعيل') {
         if (database.getGroupSettings(extra.from).autosticker) {
-          return extra.reply('*AutoSticker is already ON*');
+          return extra.reply('يا معلم، الملصقات التلقائية شغالة من زمان 😎');
         }
         database.updateGroupSettings(extra.from, { autosticker: true });
-        return extra.reply('✅ *AutoSticker has been turned ON*\n\nAll images and videos will now automatically be converted to stickers!');
+        return extra.reply('✅ تمام كده، الملصقات التلقائية اتفعلت 😈\n\nكل الصور والفيديوهات هتتحول لملصقات تلقائيًا!');
       }
       
-      if (opt === 'off') {
+      if (opt === 'تعطيل') {
         if (!database.getGroupSettings(extra.from).autosticker) {
-          return extra.reply('*AutoSticker is already OFF*');
+          return extra.reply('يا معلم، الملصقات التلقائية كانت مطفية 😅');
         }
         database.updateGroupSettings(extra.from, { autosticker: false });
-        return extra.reply('❌ *AutoSticker has been turned OFF*');
+        return extra.reply('❌ تمام يا معلم، الملصقات التلقائية اتقفلت 💤');
       }
       
-      return extra.reply('❌ Invalid option!\nUsage: .autosticker <on/off>');
+      return extra.reply('⚠️ مش خيار صح! استخدم: .ملصقات_تلقائية <تفعيل/تعطيل> 😅');
     } catch (error) {
-      console.error('[AutoSticker Command Error]:', error);
-      return extra.reply('❌ Error updating autosticker setting.');
+      console.error('[أمر الملصقات التلقائية خطأ]:', error);
+      return extra.reply('❌ حصل غلطة يا معلم 😢 أثناء تحديث إعدادات الملصقات التلقائية.');
     }
   }
 };
-

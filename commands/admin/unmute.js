@@ -1,13 +1,13 @@
 /**
- * Unmute Command - Open group (all members can send)
+ * فتح الجروب - السماح لكل الأعضاء بإرسال الرسائل
  */
 
 module.exports = {
-    name: 'unmute',
-    aliases: ['open', 'opengroup'],
+    name: 'فتح_الروم',
+    aliases: ['فتح_الجروب', 'فتح'],
     category: 'admin',
-    description: 'Open group (all members can send messages)',
-    usage: '.unmute',
+    description: 'فتح الجروب والسماح لكل الأعضاء بالكلام',
+    usage: '.فتح',
     groupOnly: true,
     adminOnly: true,
     botAdminNeeded: true,
@@ -15,11 +15,10 @@ module.exports = {
     async execute(sock, msg, args, extra) {
       try {
         await sock.groupSettingUpdate(extra.from, 'not_announcement');
-        await extra.reply('🔓 Group has been opened!\n\nAll members can send messages now.');
+        await extra.reply('الجروب اتفتح يكبير الكل يتكلم ياشوباب 👀❤️');
         
       } catch (error) {
-        await extra.reply(`❌ Error: ${error.message}`);
+        await extra.reply(`حصل خطأ: ${error.message} ❌`);
       }
     }
   };
-  

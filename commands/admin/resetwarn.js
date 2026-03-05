@@ -1,15 +1,16 @@
 /**
- * ResetWarn Command - Reset warnings for a user
+ * أمر مسح التحذيرات - ستايل لوسيفر 😈
+ * حذف كل التحذيرات من عضو
  */
 
 const database = require('../../database');
 
 module.exports = {
-  name: 'resetwarn',
-  aliases: ['resetwarning', 'clearwarn', 'unwarn', 'delwarn'],
+  name: 'مسح_التحذيرات',
+  aliases: ['resetwarn', 'resetwarning', 'clearwarn', 'unwarn', 'delwarn'],
   category: 'admin',
-  description: 'Reset all warnings for a user',
-  usage: '.resetwarn @user',
+  description: 'مسح كل التحذيرات من عضو 😎',
+  usage: '.مسح_التحذيرات @عضو',
   groupOnly: true,
   adminOnly: true,
   botAdminNeeded: true,
@@ -25,28 +26,28 @@ module.exports = {
       } else if (ctx?.participant && ctx.stanzaId && ctx.quotedMessage) {
         target = ctx.participant;
       } else {
-        return extra.reply('❌ Please mention or reply to the user to reset warnings!\n\nExample: .resetwarn @user');
+        return extra.reply(' اعمل منشن للشخص أو رد على رسالته عشان امسح التحذيرات.\nمثال: .مسح_التحذيرات @عضو');
       }
       
-      // Get current warnings before clearing
       const currentWarnings = database.getWarnings(extra.from, target);
       
       if (currentWarnings.count === 0) {
-        return extra.reply(`✅ @${target.split('@')[0]} has no warnings to reset.`, { mentions: [target] });
+        return extra.reply(` العضو ده @${target.split('@')[0]} مفيهوش أي تحذيرات أصلا 😅`, { mentions: [target] });
       }
       
-      // Clear all warnings
       database.clearWarnings(extra.from, target);
       
       await sock.sendMessage(extra.from, {
-        text: `✅ *Warnings Reset*\n\n👤 User: @${target.split('@')[0]}\n⚠️ Previous warnings: ${currentWarnings.count}\n\nAll warnings have been cleared.`,
+        text: `✅ تم مسح كل التحذيرات من العضو بنجاح! 😈\n\n` +
+              `👤 المستخدم: @${target.split('@')[0]}\n` +
+              `⚠️ عدد التحذيرات اللي كانت موجودة: ${currentWarnings.count}\n\n` +
+              `التحذيرات اتصفرت تمام!`,
         mentions: [target]
       }, { quoted: msg });
       
     } catch (error) {
       console.error('ResetWarn command error:', error);
-      await extra.reply(`❌ Error: ${error.message}`);
+      await extra.reply(`❌ حصل خطأ أثناء تنفيذ الأمر: ${error.message}`);
     }
   }
 };
-

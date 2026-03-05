@@ -1,15 +1,16 @@
 /**
- * Demote Command - Remove admin privileges
+ * أمر تنزيل مشرف - ستايل لوسيفر 😈
+ * إزالة صلاحيات الادمن من عضو
  */
 
 const { findParticipant } = require('../../utils/jidHelper');
 
 module.exports = {
-  name: 'demote',
-  aliases: ['removeadmin'],
+  name: 'تنزيل_مشرف',                 
+  aliases: ['طرد_يعرص'],       
   category: 'admin',
-  description: 'Remove admin privileges from member',
-  usage: '.demote @user',
+  description: 'نزل العضو من المشرفين', 
+  usage: '.تنزيل @العضو',
   groupOnly: true,
   adminOnly: true,
   botAdminNeeded: true,
@@ -25,33 +26,29 @@ module.exports = {
       } else if (ctx?.participant && ctx.stanzaId && ctx.quotedMessage) {
         target = ctx.participant;
       } else {
-        return extra.reply('❌ Please mention or reply to the user to demote!\n\nExample: .demote @user');
+        return extra.reply('❌ يا معلم، منشن العضو أو رد على رسالته عشان تنزله من المشرفين 😅\nمثال: .تنزيل @العضو');
       }
       
-      // Fetch FRESH group metadata to avoid stale cache
       const freshMetadata = await sock.groupMetadata(extra.from);
-      
-      // Use findParticipant for LID-aware matching with fresh metadata
       const foundParticipant = findParticipant(freshMetadata.participants, target);
       
       if (!foundParticipant) {
-        return extra.reply('❌ User not found in group!');
+        return extra.reply('❌ العضو مش موجود في الجروب 😢');
       }
       
-      // Check if user is admin using fresh data
       if (foundParticipant.admin !== 'admin' && foundParticipant.admin !== 'superadmin') {
-        return extra.reply('❌ This user is not an admin!');
+        return extra.reply('❌ العضو ده مش مشرف 😎');
       }
       
       await sock.groupParticipantsUpdate(extra.from, [target], 'demote');
       
       await sock.sendMessage(extra.from, {
-        text: `✅ @${target.split('@')[0]} is no longer an admin!`,
+        text: `✅ تمام يا معلم، نزّلنا @${target.split('@')[0]} من المشرفين 😈`,
         mentions: [target]
       }, { quoted: msg });
       
     } catch (error) {
-      await extra.reply(`❌ Error: ${error.message}`);
+      await extra.reply(`❌ حصلت غلطة يا معلم: ${error.message} 😢`);
     }
   }
 };
